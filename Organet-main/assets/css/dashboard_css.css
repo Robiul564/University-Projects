@@ -1,0 +1,273 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url("/assets/img/background.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+}
+
+.container_dashboard {
+    display: flex;
+    width: 90%;
+    /*max-width: 1501px;*/
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar {
+    width: 250px;
+    background: rgba(33, 37, 41, 0.5);
+    padding: 20px;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo img {
+    width: 100%;
+    max-width: 150px;
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 10px auto;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 5px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e6eaea;
+}
+
+.img_div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img_div img {
+    padding: 0 0 8px 0;
+}
+
+.img_div span {
+    margin-left: 10px;
+}
+
+.home {
+    margin-top: 40px;
+    margin-bottom: 80px;
+}
+
+.submenu {
+    display: none;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1px 5px;
+    border-radius: 5px;
+}
+
+.project:hover .submenu {
+    display: block;
+    font-size: 12px;
+
+}
+
+.profile-btn {
+    background: #007bff;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-btn:hover {
+    background: #1263bd;
+    color: #f6f1f1;
+}
+
+.profile-btn::before {
+    content: "👤";
+    margin-right: 10px;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.dashboard-header h1 {
+    font-size: 30px;
+}
+
+.dashboard-header p {
+    font-size: 15px;
+}
+
+.learn-more-btn {
+    background: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.stat {
+    padding: 10px;
+    border-radius: 10px;
+    width: 100px;
+    text-align: center;
+}
+
+.total-task {
+    background: #6c757d;
+}
+
+.in-progress {
+    background: #ffc107;
+}
+
+.dashboard-body {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.right_container {
+    box-sizing: border-box;
+    background: rgba(33, 37, 41, 0.5);
+    padding: 10px;
+}
+
+.calendar {
+    width: 300px;
+    height: 400px;
+    background: #4b607a;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f2f5;
+}
+
+.current-date {
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.navigation {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-btn {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: #f0f2f5;
+    cursor: pointer;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.dropdown-toggle:hover {
+    color: #ffffff;
+    background: #6482aa;
+}
+
+.nav-btn:hover {
+    background: #6482aa;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.weekday {
+    font-size: 0.9rem;
+    color: #ffffff;
+    font-weight: 500;
+    text-align: center;
+    padding: 5px;
+}
+
+.day {
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+    background: none;
+}
+
+.day:hover:not(.inactive) {
+    background: #8699b3;
+}
+
+.day.inactive {
+    color: #9f6b6b;
+    cursor: default;
+}
+
+.day.today {
+    background: #acc7df;
+    color: #1877f2;
+    font-weight: bold;
+}
+
+.day.selected {
+    background: #1877f2;
+    color: white;
+}

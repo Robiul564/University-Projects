@@ -1,0 +1,27 @@
+.body1 {
+    font-family: Arial, sans-serif;
+    margin-top: 55px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+}
+
+.tracker-container {
+    height: 300px;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 30px;
+    background: transparent;
+    border-radius: 8px;
+
+    text-align: center;
+}
+
+canvas {
+    padding: 0;
+    width: 100%;
+    max-width: 300px;
+    height: 200px;
+    margin: 0 auto;
+    display: block;
+}

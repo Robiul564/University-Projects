@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrgNet Dashboard</title>
+    <link rel="stylesheet" href="/dashboard_css.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <img src="logo.png" alt="OrgNet Logo">
+                <h1>OrgaNet</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li class="home"><a href="#">
+                            <div class="img_div"><img src="/home.png" width="20px"> <span>Home</span></div>
+                        </a></li>
+                    <li><a href="#">
+                            <div class="img_div"><img src="/user.png" width="20px"> <span>Employee List</span></div>
+                        </a></li>
+                    <li><a href="#">
+                            <div class="img_div"><img src="/new-project.png" width="20px"> <span>Add New Project</span>
+                            </div>
+                        </a></li>
+                    <li class="project">
+                        <a href="#">Project 1 <img src="/down-arrow.png" width="16px"></a>
+                        <ul class="submenu">
+                            <li><a href="#">
+                                    <div class="img_div"><img src="/list.png" width="16px"> <span>List 1</span></div>
+                                </a></li>
+                            <li><a href="#">
+                                    <div class="img_div"><img src="/list.png" width="16px"> <span>List 2</span></div>
+                                </a></li>
+                        </ul>
+                    </li>
+                    <li class="project">
+                        <a href="#">Project 2 <img src="/down-arrow.png" width="16px"></a>
+                        <ul class="submenu">
+                            <li><a href="#">
+                                    <div class="img_div"><img src="/list.png" width="16px"> <span>List 1</span></div>
+                                </a></li>
+                            <li><a href="#">
+                                    <div class="img_div"><img src="/list.png" width="16px"> <span>List 2</span></div>
+                                </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <button class="profile-btn">Profile</button>
+        </div>
+        <main class="main-content">
+            <header class="dashboard-header">
+                <h1>Welcome To Your Task Management Area</h1>
+                <p>Lorem ipsum dolor sit amet consectetur. Bibendum risus urna tortor praesent.</p>
+                <a href="#"><button class="learn-more-btn">Learn More</button></a>
+                <div class="stats">
+                    <div class="stat total-task">1220 Total Task</div>
+                    <div class="stat in-progress">07 InProgress</div>
+                   
+                </div>
+            </header>
+            <section class="dashboard-body">
+            </section>
+        </main>
+        <div class="right_container">
+            <div class="calendar">
+                <div class="header">
+                    <h2 class="current-date"></h2>
+                    <div class="navigation">
+                        <button class="nav-btn" id="prevMonth">&lt;</button>
+                        <button class="nav-btn" id="nextMonth">&gt;</button>
+                    </div>
+                </div>
+                <div class="calendar-grid">
+                    <div class="weekday">Sun</div>
+                    <div class="weekday">Mon</div>
+                    <div class="weekday">Tue</div>
+                    <div class="weekday">Wed</div>
+                    <div class="weekday">Thu</div>
+                    <div class="weekday">Fri</div>
+                    <div class="weekday">Sat</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/calendar_script.js"></script>
+</body>
+
+</html>
