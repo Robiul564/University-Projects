@@ -247,45 +247,101 @@ app.get('/specialist-dashboard-1', (req, res) => {
   res.sendFile(path.join(projectRoot, 'specialist Dashboard-1', 'index.php'));
 });
 
-// ======================== DIRECTORY ROUTES (serve index.php from directories) ========================
-app.get('/add-job-2', (req, res) => {
-  res.sendFile(path.join(projectRoot, 'Add job 2', 'index.php'));
-});
-
-app.get('/add-job-pore-chai', (req, res) => {
-  res.sendFile(path.join(projectRoot, 'Add job pore chai', 'index.php'));
-});
-
-app.get('/add-review', (req, res) => {
-  res.sendFile(path.join(projectRoot, 'add review', 'index.php'));
-});
-
-app.get('/add-review-2', (req, res) => {
-  res.sendFile(path.join(projectRoot, 'add review 2', 'index.php'));
-});
-
-// Catch-all for directory requests - serve index.php if it exists
-app.get('/:path/*', (req, res, next) => {
-  const fullPath = req.params.path + '/' + (req.params[0] || '');
-  const filePath = path.join(projectRoot, fullPath, 'index.php');
-  
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    next();
-  }
-});
-
-// Serve index.php for directory routes without trailing /
-app.get('/:dir', (req, res, next) => {
+// ======================== GENERIC FORM POST HANDLER ========================
+// This handles form submissions from any directory-based page
+app.post('/:dir/', upload.single('Vendor-image'), (req, res, next) => {
   const dirPath = path.join(projectRoot, req.params.dir);
   const indexPath = path.join(dirPath, 'index.php');
   
-  if (fs.existsSync(indexPath)) {
-    res.sendFile(indexPath);
-  } else {
-    next();
+  if (!fs.existsSync(indexPath)) {
+    return next();
   }
+  
+  // Store form data in session
+  req.session.formData = req.session.formData || {};
+  req.session.formData = { ...req.session.formData, ...req.body };
+  if (req.file) {
+    req.session.formData.file = req.file.buffer.toString('base64');
+    req.session.formData.fileName = req.file.originalname;
+  }
+  
+  // Look for redirect in the PHP file (extract header redirects)
+  fs.readFile(indexPath, 'utf8', (err, data) => {
+    if (err) return res.status(500).send('Error processing form');
+    
+    // Extract redirect URL from PHP
+    const redirectMatch = data.match(/header\s*\(\s*["']location\s*:\s*([^"']+)["']\s*\)/);
+    if (redirectMatch) {
+      let redirectUrl = redirectMatch[1];
+      // Remove localhost and protocol
+      redirectUrl = redirectUrl.replace(/http:\/\/localhost:\d+/g, '');
+      // URL decode
+      redirectUrl = decodeURIComponent(redirectUrl);
+      return res.redirect(redirectUrl);
+    }
+    
+    // If no redirect, just reload the same page
+    res.redirect(req.originalUrl);
+  });
+});
+
+app.post('/:dir', (req, res, next) => {
+  // Redirect with trailing slash for consistency
+  res.redirect(req.originalUrl + '/');
+});
+
+// ======================== CATCH-ALL ROUTING ========================
+// This handles all directory-based requests
+
+// For directory requests with trailing slash, serve index.php
+app.get('/:dir/', (req, res, next) => {
+  const dirPath = path.join(projectRoot, req.params.dir);
+  const indexPath = path.join(dirPath, 'index.php');
+  
+  // Check if index.php exists in the directory
+  if (fs.existsSync(indexPath)) {
+    return res.sendFile(indexPath);
+  }
+  
+  next();
+});
+
+// For requests without trailing slash, redirect to add trailing slash
+app.get('/:dir', (req, res, next) => {
+  const dirPath = path.join(projectRoot, req.params.dir);
+  
+  // Skip if it looks like a file (has extension)
+  if (path.extname(req.params.dir)) {
+    return next();
+  }
+  
+  // Check if directory exists with index.php
+  const indexPath = path.join(dirPath, 'index.php');
+  if (fs.existsSync(indexPath)) {
+    // Redirect to the trailing slash version
+    return res.redirect(req.originalUrl + '/');
+  }
+  
+  next();
+});
+
+// Handle requests with subpaths (e.g., /path/to/subdir/)
+app.get('/:dir/*', (req, res, next) => {
+  const pathStr = req.params.dir + '/' + req.params[0];
+  const fullPath = path.join(projectRoot, pathStr);
+  const indexPath = path.join(fullPath, 'index.php');
+  
+  // Check if it's a direct file
+  if (fs.existsSync(fullPath) && fs.statSync(fullPath).isFile()) {
+    return res.sendFile(fullPath);
+  }
+  
+  // Check if it's a directory with index.php
+  if (fs.existsSync(indexPath)) {
+    return res.sendFile(indexPath);
+  }
+  
+  next();
 });
 
 // 404 handler
