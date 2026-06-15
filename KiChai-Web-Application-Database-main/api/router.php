@@ -2,6 +2,9 @@
 // Vercel PHP router: routes incoming requests to existing PHP files
 // Preserves application logic by including target PHP files unchanged.
 
+// Get project root (parent of api/ directory)
+$projectRoot = dirname(dirname(__FILE__));
+
 $path = isset($_GET['path']) ? $_GET['path'] : '';
 $path = urldecode($path);
 
@@ -10,27 +13,30 @@ $path = preg_replace('#/+#','/',$path);
 $path = ltrim($path, '/');
 $path = str_replace("..", "", $path);
 
-if ($path === '' || $path === '/') {
-    $candidates = ['index.php'];
+if ($path === '' || $path === '/' || $path === 'api/router') {
+    $candidates = [$projectRoot . '/index.php'];
 } else {
     $candidates = [];
     $requested = $path;
 
+    // Build full paths from project root
+    $fullPath = $projectRoot . '/' . $requested;
+    
     // direct file
-    if (file_exists($requested) && is_file($requested)) {
-        $candidates[] = $requested;
+    if (file_exists($fullPath) && is_file($fullPath)) {
+        $candidates[] = $fullPath;
     }
     // try with .php
-    if (file_exists($requested . '.php')) {
-        $candidates[] = $requested . '.php';
+    if (file_exists($fullPath . '.php')) {
+        $candidates[] = $fullPath . '.php';
     }
     // if directory, try index.php
-    if (is_dir($requested) && file_exists($requested . '/index.php')) {
-        $candidates[] = $requested . '/index.php';
+    if (is_dir($fullPath) && file_exists($fullPath . '/index.php')) {
+        $candidates[] = $fullPath . '/index.php';
     }
     // if request ends with slash
-    if (substr($requested, -1) === '/' && file_exists($requested . 'index.php')) {
-        $candidates[] = $requested . 'index.php';
+    if (substr($requested, -1) === '/' && file_exists($fullPath . 'index.php')) {
+        $candidates[] = $fullPath . 'index.php';
     }
 }
 
@@ -41,7 +47,7 @@ foreach ($candidates as $c) {
 
 if (!$target) {
     http_response_code(404);
-    echo "404 Not Found";
+    echo json_encode(['error' => '404 Not Found', 'path' => $path, 'candidates' => $candidates, 'projectRoot' => $projectRoot]);
     exit;
 }
 
@@ -56,7 +62,7 @@ if ($ext !== 'php') {
 
 // Emulate requested script environment
 $_SERVER['SCRIPT_FILENAME'] = realpath($target);
-$_SERVER['SCRIPT_NAME'] = '/' . ltrim($target, '/');
+$_SERVER['SCRIPT_NAME'] = '/' . ltrim(str_replace($projectRoot, '', $target), '/');
 $_SERVER['PHP_SELF'] = $_SERVER['SCRIPT_NAME'];
 
 // Change working directory to the script's directory so relative includes work

@@ -1,12 +1,7 @@
 {
   "version": 2,
-  "functions": {
-    "api/*.php": {
-      "runtime": "php@8.1"
-    }
-  },
   "routes": [
-    { "src": "\\/(.*\\.(?:css|js|png|jpg|jpeg|gif|svg|ico|woff2|woff|ttf))$", "dest": "\/$1" },
-    { "src": "\/(.*)", "dest": "\/api\/router.php?path=$1" }
+    { "src": "\\/(.*\\.(?:css|js|png|jpg|jpeg|gif|svg|ico|woff2|woff|ttf|eot))$", "dest": "\/$1" },
+    { "src": "^/(.*)$", "dest": "/api/router?path=$1" }
   ]
 }
