@@ -23,15 +23,22 @@ app.use(session({
   }
 }));
 
-// Middleware to serve PHP files as HTML
+// Middleware to serve PHP files as HTML (strips PHP code, fixes redirects)
 const servePhpAsHtml = (req, res, next) => {
   const originalSendFile = res.sendFile;
   res.sendFile = function(filepath, options, callback) {
     if (filepath.endsWith('.php')) {
       fs.readFile(filepath, 'utf8', (err, data) => {
         if (err) return res.status(404).send('Not found');
+        // Strip PHP tags and code, keep only HTML
+        let html = data.replace(/<\?php[\s\S]*?\?>/g, '');
+        
+        // Replace localhost redirects with proper URLs
+        html = html.replace(/http:\/\/localhost:3000/g, '');
+        html = html.replace(/href="([^"]*)\s+/g, 'href="$1" ');
+        
         res.set('Content-Type', 'text/html; charset=utf-8');
-        res.send(data);
+        res.send(html);
       });
     } else {
       originalSendFile.call(this, filepath, options, callback);
