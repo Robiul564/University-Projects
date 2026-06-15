@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/router.php", "use": "@vercel/php" }
+  ],
+  "routes": [
+    { "src": "\\/(.*\\.(?:css|js|png|jpg|jpeg|gif|svg|ico|woff2|woff|ttf))$", "dest": "\/$1" },
+    { "src": "\/(.*)", "dest": "\/api\/router.php?path=$1" }
+  ]
+}
