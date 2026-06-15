@@ -23,6 +23,25 @@ app.use(session({
   }
 }));
 
+// Middleware to serve PHP files as HTML
+const servePhpAsHtml = (req, res, next) => {
+  const originalSendFile = res.sendFile;
+  res.sendFile = function(filepath, options, callback) {
+    if (filepath.endsWith('.php')) {
+      fs.readFile(filepath, 'utf8', (err, data) => {
+        if (err) return res.status(404).send('Not found');
+        res.set('Content-Type', 'text/html; charset=utf-8');
+        res.send(data);
+      });
+    } else {
+      originalSendFile.call(this, filepath, options, callback);
+    }
+  };
+  next();
+};
+
+app.use(servePhpAsHtml);
+
 // Middleware
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.json({ limit: '50mb' }));
